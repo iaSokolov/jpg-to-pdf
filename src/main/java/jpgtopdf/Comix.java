@@ -24,26 +24,29 @@ public class Comix {
         this.image = image;
     }
 
-    public void save(String path) throws IOException, DocumentException {
+    public void save(Folder folder) {
         List<String> fileNameList = this.image
                 .stream()
                 .map(file -> new jpgtopdf.Image(file))
                 .sorted((o1, o2) -> (o1.getPriox() - o2.getPriox()))
                 .map(image -> image.getPath())
                 .collect(Collectors.toList());
-
-        Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream(new File(path, String.format("%s.pdf", this.name))));
-        document.open();
-
-        for (String fileName : fileNameList) {
-            document.newPage();
-            Image image = Image.getInstance(fileName);
-            image.scaleToFit(PageSize.A4);
-            image.setBorderWidth(1);
-            image.setAbsolutePosition(0, 0);
-            document.add(image);
+        try {
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(new File(folder.getPath(), String.format("%s.pdf", this.name))));
+            document.open();
+            for (String fileName : fileNameList) {
+                document.newPage();
+                Image image = Image.getInstance(fileName);
+                image.scaleToFit(PageSize.A4);
+                image.setBorderWidth(1);
+                image.setAbsolutePosition(0, 0);
+                document.add(image);
+            }
+            document.close();
         }
-        document.close();
+        catch (Exception ex) {
+            Log.out(String.format("ошибка:%s", ex.getMessage()));
+        }
     }
 }

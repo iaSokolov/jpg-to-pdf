@@ -1,17 +1,19 @@
 package jpgtopdf;
 
 public class Image {
-    private String path;
-    private Integer priox;
+    private final String path;
+    private final Integer priox;
 
     public Image(String path) {
         String prioxStr = path.replaceAll("[^\\d]", "");
+        int parsePriox;
         try {
-            priox = Integer.parseInt(prioxStr);
+            parsePriox = Integer.parseInt(prioxStr);
         }
-        catch (Exception ex) {
-            priox = 0;
+        catch (NumberFormatException ex) {
+            parsePriox = 0;
         }
+        this.priox = parsePriox;
         this.path = path;
     }
 
@@ -19,7 +21,7 @@ public class Image {
         return this.path;
     }
 
-    public Integer getPriox() {
+    public int getPriox() {
         return priox;
     }
 }

@@ -1,33 +1,35 @@
 package jpgtopdf;
 
 import com.itextpdf.text.DocumentException;
-import java.io.File;
+
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class App {
+    private final Argument argument;
+
+    public App(Argument argument) {
+        this.argument = argument;
+    }
+
+    private void execute() {
+
+        try {
+            for (Comix comix : new Catalog(argument.getSource()).getComix()) {
+                comix.save(argument.getOutput());
+            }
+        } catch (Exception ex) {
+            Log.out(String.format("ошибка:%s", ex.getMessage()));
+        }
+
+    }
+
     public static void main(String[] args) throws IOException, DocumentException {
-        System.out.println("start-of-program");
-
-        String outputPath = "";
-        String rootPath = "";
-        if (args != null && args.length == 2) {
-            rootPath = args[0];
-            outputPath = args[1];
-        } else {
-            System.out.println("error");
+        Log.out("запуск программы");
+        try {
+            new App(new Argument(args)).execute();
+        } catch (Exception ex) {
+            Log.out(String.format("ошибка:%s", ex.getMessage()));
         }
-
-        if (outputPath.isEmpty() || rootPath.isEmpty()) {
-            System.out.println("error");
-            return;
-        }
-        File root = new File(rootPath);
-        Catalog catalog = new Catalog(rootPath);
-        ArrayList<Comix> comixList = catalog.getComix();
-        for (Comix comix : comixList) {
-            comix.save(outputPath);
-        }
-        System.out.println("end-of-program");
+        Log.out("программа выполнена");
     }
 }
