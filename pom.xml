@@ -69,6 +69,7 @@
                     <mainClass>jpgtopdf.App</mainClass>
                     <arguments>
                         <argument>./data</argument>
+                        <argument>./comix</argument>
                     </arguments>
                 </configuration>
             </plugin>

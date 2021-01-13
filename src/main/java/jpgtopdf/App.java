@@ -12,15 +12,14 @@ public class App {
     }
 
     private void execute() {
-
         try {
-            for (Comix comix : new Catalog(argument.getSource()).getComix()) {
-                comix.save(argument.getOutput());
-            }
+            new Catalog(argument.getSource())
+                    .getComix()
+                    .stream()
+                    .forEach(comix -> comix.save(argument.getOutput()));
         } catch (Exception ex) {
             Log.out(String.format("ошибка:%s", ex.getMessage()));
         }
-
     }
 
     public static void main(String[] args) throws IOException, DocumentException {
